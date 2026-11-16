@@ -126,7 +126,7 @@
             </div>
             <p class="text-sm text-indigo-100 leading-relaxed mb-2">What did you <strong>see or measure</strong> in the picture or table?</p>
             <div class="text-xs bg-indigo-950/80 rounded-xl p-2.5 text-emerald-200 border border-indigo-700">
-              <strong>Tip:</strong> Look out for Key words or phrases in the question, diagrams, observationsm tables or graphs.
+              <strong>Tip:</strong> Look out for Key words or phrases in the question, diagrams, observations, tables or graphs.
             </div>
           </div>
 
@@ -661,75 +661,77 @@
         category: 'Cycles: Animals',
         badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
         caseNum: 'QUESTION 4',
-        title: 'Mealworm Beetle Life Cycle',
-        story: 'Siti kept some mealworms in a container with oats and carrot slices. After a few weeks, she noticed Stage C inside the box. Stage C did not eat any food and did not move around.',
-        question: 'Name Stage C in the life cycle below and explain why it does not eat any food.',
-        svgCaption: '4-STAGE LIFE CYCLE OF A BEETLE',
-        svgFooter: 'Stage A: Egg  →  Stage B: Larva (Mealworm)  →  Stage C: ?  →  Stage D: Adult Beetle',
+        title: 'Life Cycle of a Mosquito (Preventing Breeding)',
+        story: 'During a dengue check, an officer found mosquito larvae (wrigglers) swimming in a pail of stagnant water in a garden. The officer then poured all the water out onto the dry ground.',
+        question: 'Will pouring away stagnant water decrease the number of mosquitos? Explain why.',
+        svgCaption: 'PREVENTING MOSQUITO BREEDING',
+        svgFooter: 'Before: Mosquito larvae in stagnant water  →  After: Water poured onto dry ground',
         clues: [
-          { id: 'lc1', label: 'The beetle has a 4-stage life cycle: Egg → Larva → Pupa → Adult', type: 'Clue 1' },
-          { id: 'lc2', label: 'Stage C comes right after the larva (mealworm) stage', type: 'Clue 2' },
-          { id: 'lc3', label: 'During Stage C, the insect stops eating and does not move around', type: 'Clue 3' }
+          { id: 'lc1', label: 'Mosquito larvae (wrigglers) were living in the stagnant water', type: 'Clue 1' },
+          { id: 'lc2', label: 'The officer poured all the water out onto the dry ground', type: 'Clue 2' },
+          { id: 'lc3', label: 'Mosquitoes have a 4-stage life cycle: Egg → Larva → Pupa → Adult', type: 'Clue 3' }
         ],
         starters: {
           claim: [
-            'Stage C is the pupa stage.',
-            'Stage C is called the pupa.'
+            'Pouring away stagnant water will decrease the number of mosquitos.',
+            'Pouring away stagnant water will reduce the mosquito population.'
           ],
           evidence: [
-            'In the life cycle diagram, Stage C comes after the larva stage, and it does not eat or move.',
-            'Stage C is the third stage after the mealworm (larva) and stays still without eating.'
+            'Mosquito larvae were living in the stagnant water, and the water was poured onto dry ground.',
+            'In the picture, the stagnant water with mosquito larvae was poured out onto dry ground.'
           ],
           reasoning: [
-            'During the pupa stage, the insect stops feeding and moving while its body transforms (changes) into an adult beetle.',
-            'A pupa does not eat because it is undergoing transformation into an adult.'
+            'Mosquitoes lay eggs in stagnant water, and their larvae and pupae can only survive in water. Without water, they die and cannot become adult mosquitoes.',
+            'The egg, larva, and pupa stages of a mosquito live in water, so without stagnant water they will die before becoming adults.'
           ]
         },
         rubricChecks: {
-          claimKeywords: ['pupa'],
-          evidenceKeywords: ['larva', 'after', 'eat', 'move', 'third', 'stage'],
-          reasoningKeywords: ['adult', 'change', 'transform', 'develop', 'beetle']
+          claimKeywords: ['decrease', 'reduce', 'less', 'fewer'],
+          evidenceKeywords: ['larva', 'wriggler', 'stagnant', 'water', 'dry', 'poured'],
+          reasoningKeywords: ['water', 'survive', 'die', 'adult', 'egg', 'pupa']
         },
         modelCER: {
-          claim: 'Stage C is the pupa stage.',
-          evidence: 'In the diagram, Stage C comes right after the larva (mealworm) stage, and it stays still without eating any food.',
-          reasoning: 'During the pupa stage of a 4-stage life cycle, the insect stops eating and moving while its body transforms into an adult beetle.'
+          claim: 'Pouring away stagnant water will decrease the number of mosquitos.',
+          evidence: 'Mosquito larvae were living in the stagnant water, and the water was poured onto dry ground.',
+          reasoning: 'Mosquitoes lay eggs in stagnant water, and their larvae and pupae can only survive in water. Without water, they die and cannot become adult mosquitoes.'
         },
         svg: `
-          <svg viewBox="0 0 600 265" class="w-full max-w-xl h-auto" role="img" aria-label="4-stage life cycle of a mealworm beetle showing Egg, Larva, Stage C Pupa, and Adult">
-            <!-- Stage A: Egg -->
-            <rect x="20" y="65" width="120" height="130" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
-            <text x="80" y="92" text-anchor="middle" font-size="13" font-weight="800" fill="#475569">Stage A: Egg</text>
-            <ellipse cx="72" cy="135" rx="8" ry="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" />
-            <ellipse cx="90" cy="142" rx="8" ry="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" />
-            <text x="80" y="178" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">Tiny eggs</text>
+          <svg viewBox="0 0 600 265" class="w-full max-w-xl h-auto" role="img" aria-label="Pail of stagnant water with mosquito larvae being poured onto dry ground">
+            <!-- Left Panel: Pail with Stagnant Water & Larvae -->
+            <rect x="25" y="20" width="245" height="225" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <text x="147" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">1. Pail of Stagnant Water</text>
+            
+            <!-- Pail Shape -->
+            <polygon points="92,85 202,85 190,185 104,185" fill="#e2e8f0" stroke="#64748b" stroke-width="2.5" />
+            <!-- Stagnant Water Inside -->
+            <polygon points="96,112 198,112 190,185 104,185" fill="#bae6fd" stroke="#0284c7" stroke-width="2" />
+            <!-- Wrigglers (Larvae) -->
+            <path d="M 122,130 Q 130,138 122,146" fill="none" stroke="#b45309" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M 152,142 Q 160,150 152,158" fill="none" stroke="#b45309" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M 172,126 Q 179,134 172,142" fill="none" stroke="#b45309" stroke-width="3.5" stroke-linecap="round" />
 
-            <!-- Arrow 1 -->
-            <text x="154" y="136" text-anchor="middle" font-size="18" font-weight="800" fill="#6366f1">→</text>
+            <text x="147" y="208" text-anchor="middle" font-size="12" font-weight="800" fill="#0369a1">Mosquito larvae in water</text>
+            <text x="147" y="225" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">Egg → Larva → Pupa live in water</text>
 
-            <!-- Stage B: Larva -->
-            <rect x="168" y="65" width="120" height="130" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
-            <text x="228" y="92" text-anchor="middle" font-size="13" font-weight="800" fill="#475569">Stage B: Larva</text>
-            <path d="M 192,140 Q 228,125 264,140" fill="none" stroke="#d97706" stroke-width="12" stroke-linecap="round" />
-            <text x="228" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#059669">Eats a lot &amp; moults</text>
+            <!-- Center Arrow -->
+            <text x="300" y="140" text-anchor="middle" font-size="24" font-weight="800" fill="#4f46e5">→</text>
 
-            <!-- Arrow 2 -->
-            <text x="302" y="136" text-anchor="middle" font-size="18" font-weight="800" fill="#6366f1">→</text>
+            <!-- Right Panel: Poured onto Dry Ground -->
+            <rect x="330" y="20" width="245" height="225" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <text x="452" y="46" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">2. Poured onto Dry Ground</text>
 
-            <!-- Stage C: Mystery Pupa -->
-            <rect x="316" y="55" width="124" height="150" rx="16" fill="#eef2ff" stroke="#4f46e5" stroke-width="3" />
-            <text x="378" y="85" text-anchor="middle" font-size="14" font-weight="800" fill="#4338ca">Stage C: ???</text>
-            <ellipse cx="378" cy="132" rx="16" ry="26" fill="#fde68a" stroke="#b45309" stroke-width="2" />
-            <text x="378" y="182" text-anchor="middle" font-size="11" font-weight="800" fill="#be123c">Does NOT eat or move</text>
+            <!-- Tilted Empty Pail -->
+            <g transform="translate(395, 105) rotate(55)">
+              <polygon points="-28,-35 28,-35 22,35 -22,35" fill="#e2e8f0" stroke="#64748b" stroke-width="2.5" />
+            </g>
+            <!-- Splashing Water Drops -->
+            <path d="M 432,125 Q 455,145 462,175" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-dasharray="6,5" />
+            <path d="M 442,118 Q 472,138 484,175" fill="none" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-dasharray="6,5" />
 
-            <!-- Arrow 3 -->
-            <text x="454" y="136" text-anchor="middle" font-size="18" font-weight="800" fill="#6366f1">→</text>
-
-            <!-- Stage D: Adult -->
-            <rect x="468" y="65" width="115" height="130" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
-            <text x="525" y="92" text-anchor="middle" font-size="13" font-weight="800" fill="#475569">Stage D: Adult</text>
-            <text x="525" y="142" text-anchor="middle" font-size="30">🪲</text>
-            <text x="525" y="178" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">Lays eggs</text>
+            <!-- Dry Ground Line -->
+            <rect x="355" y="178" width="195" height="12" rx="6" fill="#fde68a" stroke="#d97706" stroke-width="1.5" />
+            <text x="452" y="210" text-anchor="middle" font-size="12" font-weight="800" fill="#be123c">No stagnant water left!</text>
+            <text x="452" y="227" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">Larvae die on dry ground</text>
           </svg>
         `
       },
@@ -763,7 +765,7 @@
           ]
         },
         rubricChecks: {
-          claimKeywords: ['repel', 'push'],
+          claimKeywords: ['repel', 'push', 'float'],
           evidenceKeywords: ['south', 'facing', 'gap', 'pole'],
           reasoningKeywords: ['like poles', 'repel', 'push away', 'same pole']
         },
@@ -794,8 +796,6 @@
               <text x="300" y="115" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">South Pole (S)</text>
               <text x="445" y="105" text-anchor="start" font-size="14" font-weight="800" fill="#0f172a">Magnet A</text>
             </g>
-
-
           </svg>
         `
       }
@@ -864,7 +864,7 @@
             id: 'r3_s2',
             text: 'When a magnet is moved towards a non-magnetic material, there will be no interactions so it must be made of a non-magnetic material.',
             correctType: 'Reasoning',
-            explanation: 'This explains the Science rule about magnets and when do they repel.'
+            explanation: 'This explains the Science rule about magnetic materials.'
           },
           {
             id: 'r3_s3',
