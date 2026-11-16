@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>P3 Science CER Studio</title>
+  <!-- Load Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @keyframes floatMagnet {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
+    }
+    .float-slow {
+      animation: floatMagnet 3s ease-in-out infinite;
+    }
+    .float-slow-delay {
+      animation: floatMagnet 3.5s ease-in-out 0.6s infinite;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: white !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-sky-50/60 text-slate-800 font-sans min-h-screen flex flex-col selection:bg-indigo-100 selection:text-indigo-900">
+
+  <!-- ===================================================================== -->
+  <!-- TOP HEADER                                                            -->
+  <!-- ===================================================================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs no-print">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <!-- Brand Identity -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-2xl bg-indigo-600 text-white flex items-center justify-center shadow-md shrink-0 font-mono font-bold text-base tracking-tight">
+          C<span class="text-emerald-300">E</span><span class="text-amber-300">R</span>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-lg sm:text-xl font-extrabold text-slate-900">P3 Science CER Helper</h1>
+            <span class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+              Primary 3
+            </span>
+          </div>
+          <p class="text-xs sm:text-sm text-slate-500">Learn to answer Science Open-Ended Questions!</p>
+        </div>
+      </div>
+
+      <!-- Right Controls: Help Guide, Stars, Reset -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button onclick="toggleCheatSheet()" id="cheat-sheet-btn" class="px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-100 hover:bg-amber-200 text-amber-950 border border-amber-300 transition-all flex items-center gap-1.5">
+          <span>💡</span>
+          <span>How to Use CER</span>
+          <svg id="cheat-chevron" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- Progress Tracker Pill -->
+        <div class="bg-slate-100 px-3.5 py-2 rounded-xl border border-slate-200 flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-600">Stars:</span>
+          <div class="flex items-center gap-1" id="progress-dots"></div>
+          <span id="progress-count" class="font-mono text-xs font-bold text-slate-900 ml-1">0/6</span>
+        </div>
+
+        <button onclick="openResetModal()" title="Start Over" class="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Kid-Friendly CER Help Drawer -->
+    <div id="cheat-sheet-drawer" class="hidden bg-indigo-950 text-white border-t border-indigo-900">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 py-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-extrabold text-amber-300">✨ The 3 Easy Steps to Answer Science Questions</h2>
+          <button onclick="toggleCheatSheet()" class="text-xs text-indigo-200 hover:text-white underline">Close</button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Claim Card -->
+          <div class="rounded-2xl bg-indigo-900/80 border border-blue-400/40 p-4">
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="w-7 h-7 rounded-lg bg-blue-500 text-white font-mono font-bold text-sm flex items-center justify-center">C</span>
+              <h3 class="font-extrabold text-blue-200 text-base">CLAIM = Your Answer</h3>
+            </div>
+            <p class="text-sm text-indigo-100 leading-relaxed mb-2">Write <strong>1 short sentence</strong> that answers the question directly.</p>
+            <div class="text-xs bg-indigo-950/80 rounded-xl p-2.5 text-amber-200 border border-indigo-700">
+              <strong>Tip:</strong> Choose an option when the question asks you to choose between things.
+            </div>
+          </div>
+
+          <!-- Evidence Card -->
+          <div class="rounded-2xl bg-indigo-900/80 border border-emerald-400/40 p-4">
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="w-7 h-7 rounded-lg bg-emerald-500 text-white font-mono font-bold text-sm flex items-center justify-center">E</span>
+              <h3 class="font-extrabold text-emerald-200 text-base">EVIDENCE = The Clue</h3>
+            </div>
+            <p class="text-sm text-indigo-100 leading-relaxed mb-2">What did you <strong>see or measure</strong> in the picture or table?</p>
+            <div class="text-xs bg-indigo-950/80 rounded-xl p-2.5 text-emerald-200 border border-indigo-700">
+              <strong>Tip:</strong> Look out for Key words or phrases in the question, diagrams, observationsm tables or graphs.
+            </div>
+          </div>
+
+          <!-- Reasoning Card -->
+          <div class="rounded-2xl bg-indigo-900/80 border border-amber-400/40 p-4">
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="w-7 h-7 rounded-lg bg-amber-400 text-slate-950 font-mono font-bold text-sm flex items-center justify-center">R</span>
+              <h3 class="font-extrabold text-amber-300 text-base">REASONING = Science Rule</h3>
+            </div>
+            <p class="text-sm text-indigo-100 leading-relaxed mb-2">Explain <strong>WHY</strong> your clue proves your answer using a Science fact.</p>
+            <div class="text-xs bg-indigo-950/80 rounded-xl p-2.5 text-amber-200 border border-indigo-700">
+              <strong>Example:</strong> "Living things need air, food, and water to survive."
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Topic & Game Selector Bar -->
+    <div class="bg-slate-100 border-t border-slate-200">
+      <div id="topic-selector-bar" class="max-w-6xl mx-auto px-4 sm:px-6 py-2.5 flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Floating Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none max-w-sm no-print">
+    <div class="bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-xl border border-slate-700 flex items-center gap-3 text-sm font-bold">
+      <span id="toast-icon" class="text-xl">🌟</span>
+      <span id="toast-msg">Message</span>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MAIN WORKSPACE                                                        -->
+  <!-- ===================================================================== -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+
+    <!-- =================================================================== -->
+    <!-- VIEW A: P3 SCIENCE QUESTION WORKSPACE                               -->
+    <!-- =================================================================== -->
+    <div id="cer-workspace-view" class="space-y-6">
+      
+      <!-- Question Header Card -->
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2.5">
+          <div class="flex items-center gap-2">
+            <span id="case-category-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-700 border border-blue-200">
+              Diversity
+            </span>
+            <span id="case-number-label" class="font-mono text-xs font-bold text-slate-400">QUESTION 1</span>
+          </div>
+          <span id="case-status-pill" class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">
+            Not Done Yet
+          </span>
+        </div>
+        <h2 id="case-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-2">Topic Title</h2>
+        <p id="case-story" class="text-slate-700 text-base leading-relaxed mb-4"></p>
+        
+        <!-- Big Question Box -->
+        <div class="rounded-2xl bg-indigo-600 text-white p-4 sm:p-5 flex items-start gap-3 shadow-xs">
+          <span class="px-2.5 py-1 rounded-lg bg-amber-400 text-slate-950 font-extrabold text-xs shrink-0 mt-0.5">QUESTION</span>
+          <p id="case-question" class="text-base sm:text-lg font-extrabold leading-snug"></p>
+        </div>
+      </div>
+
+      <!-- Picture & Clue Picker Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left 7 Cols: Science Diagram -->
+        <div class="lg:col-span-7 bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-sm font-extrabold text-slate-700 flex items-center gap-2">
+              <span>👀</span> Look & Observe
+            </h3>
+            <span id="svg-caption-badge" class="text-xs font-mono font-bold text-slate-400">PICTURE</span>
+          </div>
+
+          <div id="case-svg-container" class="w-full bg-slate-50 rounded-2xl border border-slate-200 p-3 flex items-center justify-center overflow-hidden">
+            <!-- SVG injected here -->
+          </div>
+
+          <p id="case-svg-footer" class="mt-3 text-xs sm:text-sm text-slate-600 text-center font-semibold"></p>
+        </div>
+
+        <!-- Right 5 Cols: Clickable Clues -->
+        <div class="lg:col-span-5 bg-white rounded-3xl p-5 border border-slate-200 shadow-xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-1.5">
+                <span>🔍</span> Pick Your Clues
+              </h3>
+              <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
+                Tap to save clues
+              </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 mb-3">
+              Tap the clues below that help answer the question.
+            </p>
+
+            <!-- Clickable Clue Cards -->
+            <div id="clue-cards-container" class="space-y-2.5">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- Saved Clues Box -->
+          <div class="mt-5 pt-4 border-t border-slate-100">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-extrabold text-slate-700">
+                📌 Saved Clues (<span id="pinned-count">0</span>)
+              </span>
+              <button onclick="insertPinnedIntoEvidence()" class="text-xs font-extrabold text-indigo-600 hover:text-indigo-800 bg-indigo-50 px-2.5 py-1 rounded-lg">
+                + Put Clues in Evidence
+              </button>
+            </div>
+            <div id="pinned-tray" class="min-h-[50px] rounded-xl bg-slate-50 border border-dashed border-slate-300 p-2.5 flex flex-wrap gap-1.5 items-center text-xs text-slate-400">
+              Tap any clue above to save it here...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student CER Writing Boxes -->
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div>
+            <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">✏️ Write Your CER Answer</h3>
+            <p class="text-xs sm:text-sm text-slate-500">Need help starting? Click the <strong>"+ Sentence Helper"</strong> button in each box!</p>
+          </div>
+          <div class="flex items-center gap-2 no-print">
+            <button onclick="exportStudentReport()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors">
+              📋 Copy Answer
+            </button>
+            <button onclick="window.print()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors">
+              🖨️ Print
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-5">
+          <!-- CLAIM BOX (Blue) -->
+          <div class="rounded-2xl border-2 border-blue-200 bg-blue-50/40 p-4 focus-within:border-blue-500 focus-within:bg-white transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <label for="input-claim" class="flex items-center gap-2 font-extrabold text-blue-950 text-base">
+                <span class="w-7 h-7 rounded-lg bg-blue-600 text-white font-mono text-sm flex items-center justify-center">C</span>
+                <span>CLAIM</span>
+                <span class="font-semibold text-blue-700 text-xs sm:text-sm">(Your short answer)</span>
+              </label>
+              <div class="flex items-center gap-2 no-print">
+                <select id="starter-claim" onchange="applyStarter('input-claim', this)" class="text-xs sm:text-sm bg-white border-2 border-blue-200 text-blue-900 rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option value="">+ Sentence Helper...</option>
+                </select>
+              </div>
+            </div>
+            <textarea id="input-claim" oninput="updateLiveStats()" rows="2" placeholder="Write 1 sentence that answers the question..." class="w-full rounded-xl border border-blue-200 bg-white p-3 text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+          </div>
+
+          <!-- EVIDENCE BOX (Emerald) -->
+          <div class="rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 p-4 focus-within:border-emerald-500 focus-within:bg-white transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <label for="input-evidence" class="flex items-center gap-2 font-extrabold text-emerald-950 text-base">
+                <span class="w-7 h-7 rounded-lg bg-emerald-600 text-white font-mono text-sm flex items-center justify-center">E</span>
+                <span>EVIDENCE</span>
+                <span class="font-semibold text-emerald-700 text-xs sm:text-sm">(What you see in the picture/table)</span>
+              </label>
+              <div class="flex items-center gap-2 no-print">
+                <select id="starter-evidence" onchange="applyStarter('input-evidence', this)" class="text-xs sm:text-sm bg-white border-2 border-emerald-200 text-emerald-900 rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                  <option value="">+ Sentence Helper...</option>
+                </select>
+              </div>
+            </div>
+            <textarea id="input-evidence" oninput="updateLiveStats()" rows="2" placeholder="Write the clues or numbers from the picture..." class="w-full rounded-xl border border-emerald-200 bg-white p-3 text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
+          </div>
+
+          <!-- REASONING BOX (Amber) -->
+          <div class="rounded-2xl border-2 border-amber-200 bg-amber-50/40 p-4 focus-within:border-amber-500 focus-within:bg-white transition-all">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <label for="input-reasoning" class="flex items-center gap-2 font-extrabold text-amber-950 text-base">
+                <span class="w-7 h-7 rounded-lg bg-amber-500 text-slate-950 font-mono text-sm flex items-center justify-center">R</span>
+                <span>REASONING</span>
+                <span class="font-semibold text-amber-800 text-xs sm:text-sm">(The Science rule that explains why)</span>
+              </label>
+              <div class="flex items-center gap-2 no-print">
+                <select id="starter-reasoning" onchange="applyStarter('input-reasoning', this)" class="text-xs sm:text-sm bg-white border-2 border-amber-200 text-amber-900 rounded-xl px-3 py-1.5 font-bold focus:outline-none focus:ring-2 focus:ring-amber-500">
+                  <option value="">+ Sentence Helper...</option>
+                </select>
+              </div>
+            </div>
+            <textarea id="input-reasoning" oninput="updateLiveStats()" rows="3" placeholder="Write the Science fact that connects your clue to your answer..." class="w-full rounded-xl border border-amber-200 bg-white p-3 text-base text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500"></textarea>
+          </div>
+        </div>
+
+        <!-- Big Kid-Friendly Action Buttons -->
+        <div class="flex flex-wrap items-center gap-3 pt-2 no-print">
+          <button onclick="runRubricCheck()" class="px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-base shadow-md transition-all flex items-center gap-2">
+            <span>✅</span>
+            <span>Check My Answer</span>
+          </button>
+
+          <button onclick="revealModelAnswer()" class="px-5 py-3.5 rounded-2xl bg-slate-800 hover:bg-slate-900 text-white font-bold text-sm sm:text-base transition-all flex items-center gap-2">
+            <span>🌟</span>
+            <span>Show Sample Answer</span>
+          </button>
+        </div>
+
+        <!-- Feedback Panel -->
+        <div id="rubric-feedback-panel" class="hidden rounded-2xl border-2 border-indigo-200 bg-indigo-50/50 p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-indigo-100 pb-3">
+            <h4 class="font-extrabold text-slate-900 text-base">🔍 How Did You Do?</h4>
+            <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-indigo-600 text-white">Checked!</span>
+          </div>
+          <div id="rubric-cards-grid" class="grid grid-cols-1 md:grid-cols-3 gap-3.5 text-sm">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Sample Answer Panel -->
+        <div id="model-answer-panel" class="hidden rounded-2xl border-2 border-slate-800 bg-white p-5 space-y-3 shadow-sm">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h4 class="font-extrabold text-slate-900 text-base">🌟 Sample P3 Science Answer</h4>
+            <span class="text-xs font-bold text-slate-400">COMPARE YOUR WORK</span>
+          </div>
+          <div class="space-y-3 text-base leading-relaxed">
+            <div class="p-3.5 rounded-xl bg-blue-50 border-l-4 border-blue-600 text-slate-800">
+              <span class="font-mono text-xs font-extrabold uppercase text-blue-700 block mb-0.5">C - Claim (Answer)</span>
+              <p id="model-claim-text"></p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-emerald-50 border-l-4 border-emerald-600 text-slate-800">
+              <span class="font-mono text-xs font-extrabold uppercase text-emerald-700 block mb-0.5">E - Evidence (Clue)</span>
+              <p id="model-evidence-text"></p>
+            </div>
+            <div class="p-3.5 rounded-xl bg-amber-50 border-l-4 border-amber-500 text-slate-800">
+              <span class="font-mono text-xs font-extrabold uppercase text-amber-800 block mb-0.5">R - Reasoning (Science Rule)</span>
+              <p id="model-reasoning-text"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- VIEW B: MINI-GAME ('SORT THE SENTENCES')                            -->
+    <!-- =================================================================== -->
+    <div id="scramble-game-view" class="hidden space-y-6">
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-xs">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-extrabold bg-purple-100 text-purple-800 border border-purple-200">
+            🎮 CER Sorting Game
+          </span>
+          <span class="font-mono text-xs font-bold text-slate-500">Round <span id="scramble-round-num">1</span> of <span id="scramble-total-rounds">3</span></span>
+        </div>
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mb-1.5">Sort the Science Sentences!</h2>
+        <p class="text-slate-600 text-base">
+          Read the 3 sentences below. Tap <strong>Claim</strong>, <strong>Evidence</strong>, or <strong>Reasoning</strong> for each one!
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-xs space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-indigo-600 text-white p-4 rounded-2xl">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-amber-300 block">Science Topic</span>
+            <h3 id="scramble-scenario-title" class="text-base sm:text-lg font-extrabold">Topic</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="prevScrambleRound()" class="px-3.5 py-2 rounded-xl bg-indigo-800 hover:bg-indigo-900 text-xs font-bold transition-colors">← Back</button>
+            <button onclick="nextScrambleRound()" class="px-3.5 py-2 rounded-xl bg-indigo-800 hover:bg-indigo-900 text-xs font-bold transition-colors">Next →</button>
+          </div>
+        </div>
+
+        <div id="scramble-cards-list" class="space-y-4"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
+          <button onclick="checkScrambleAnswers()" class="px-6 py-3.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-base shadow-md transition-all flex items-center gap-2">
+            <span>⚡</span>
+            <span>Check My Sorting</span>
+          </button>
+          <button onclick="resetCurrentScramble()" class="text-sm font-bold text-slate-500 hover:text-slate-800 underline">
+            Clear Round
+          </button>
+        </div>
+
+        <div id="scramble-feedback" class="hidden rounded-2xl p-4 border text-sm sm:text-base"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Custom Reset Confirmation Modal -->
+  <div id="reset-modal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 no-print">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 space-y-4">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xl">!</div>
+        <div>
+          <h3 class="text-lg font-extrabold text-slate-900">Start Over?</h3>
+          <p class="text-sm text-slate-500">This will clear all your answers and stars.</p>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-3 pt-2">
+        <button onclick="closeResetModal()" class="px-4 py-2.5 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100">Keep My Work</button>
+        <button onclick="confirmResetAll()" class="px-4 py-2.5 rounded-xl text-sm font-bold bg-rose-600 hover:bg-rose-700 text-white">Yes, Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-400 no-print">
+    Primary 3 Science CER Helper • Singapore Primary Science Syllabus
+  </footer>
+
+  <!-- ===================================================================== -->
+  <!-- P3 SYLLABUS CONTENT & INTERACTIVE LOGIC                               -->
+  <!-- ===================================================================== -->
+  <script>
+    const challenges = [
+      {
+        id: 'living_things',
+        shortTitle: '1. Living Things',
+        category: 'Diversity: Living Things',
+        badgeColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+        caseNum: 'QUESTION 1',
+        title: 'Robot Dog vs. Real Puppy',
+        story: 'Aisha has a battery-powered toy robot dog and a real puppy. She gives both of them a bowl of food and water every day. After two months, she measures their height and observes what happens to the food.',
+        question: 'Based on the table below, which one is a living thing: the robot dog or the real puppy? Explain why.',
+        svgCaption: 'OBSERVATION TABLE',
+        svgFooter: 'Look at how the height and food changed after 2 months.',
+        clues: [
+          { id: 'lt1', label: 'The real puppy grew taller from 20 cm to 28 cm', type: 'Clue 1' },
+          { id: 'lt2', label: 'The real puppy ate the food and drank the water', type: 'Clue 2' },
+          { id: 'lt3', label: 'The robot dog stayed at 20 cm and did not eat or drink', type: 'Clue 3' }
+        ],
+        starters: {
+          claim: [
+            'The real puppy is a living thing.',
+            'The robot dog is a non-living thing.'
+          ],
+          evidence: [
+            'In the table, the real puppy grew from 20 cm to 28 cm and ate food and water, while the robot dog stayed 20 cm.',
+            'The real puppy ate the food, drank water, and grew taller.'
+          ],
+          reasoning: [
+            'Living things need air, food, and water to survive, and they can grow. Non-living things do not need food or water and cannot grow.',
+            'Only living things grow and need food and water to stay alive.'
+          ]
+        },
+        rubricChecks: {
+          claimKeywords: ['puppy', 'living'],
+          evidenceKeywords: ['20', '28', 'food', 'water', 'grew', 'eat'],
+          reasoningKeywords: ['grow', 'food', 'water', 'survive', 'alive', 'living things']
+        },
+        modelCER: {
+          claim: 'The real puppy is a living thing.',
+          evidence: 'In the table, the real puppy grew from 20 cm to 28 cm and ate the food and water, while the robot dog stayed at 20 cm and did not eat or drink.',
+          reasoning: 'Living things need air, food, and water to survive, and they can grow. Non-living things do not need food or water and cannot grow.'
+        },
+        svg: `
+          <svg viewBox="0 0 600 265" class="w-full max-w-xl h-auto" role="img" aria-label="Comparison table of Robot Dog versus Real Puppy">
+            <rect x="25" y="15" width="550" height="235" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <!-- Header Row -->
+            <rect x="25" y="15" width="550" height="48" rx="14" fill="#4f46e5" />
+            <rect x="25" y="45" width="550" height="18" fill="#4f46e5" />
+            <text x="125" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">Thing</text>
+            <text x="305" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">Height After 2 Months</text>
+            <text x="485" y="45" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">Food &amp; Water</text>
+
+            <!-- Divider Lines -->
+            <line x1="210" y1="15" x2="210" y2="250" stroke="#e2e8f0" stroke-width="2" />
+            <line x1="400" y1="15" x2="400" y2="250" stroke="#e2e8f0" stroke-width="2" />
+            <line x1="25" y1="155" x2="575" y2="155" stroke="#e2e8f0" stroke-width="2" />
+
+            <!-- Row 1: Robot Dog -->
+            <circle cx="72" cy="108" r="24" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2" />
+            <text x="72" y="114" text-anchor="middle" font-size="22">🤖</text>
+            <text x="148" y="113" text-anchor="middle" font-size="14" font-weight="800" fill="#334155">Robot Dog</text>
+            <text x="305" y="106" text-anchor="middle" font-size="14" font-weight="700" fill="#475569">20 cm → 20 cm</text>
+            <text x="305" y="126" text-anchor="middle" font-size="12" font-weight="600" fill="#94a3b8">(Did not grow)</text>
+            <text x="485" y="113" text-anchor="middle" font-size="14" font-weight="700" fill="#dc2626">Did not eat or drink</text>
+
+            <!-- Row 2: Real Puppy -->
+            <circle cx="72" cy="202" r="24" fill="#fef3c7" stroke="#f59e0b" stroke-width="2" />
+            <text x="72" y="209" text-anchor="middle" font-size="22">🐶</text>
+            <text x="148" y="207" text-anchor="middle" font-size="14" font-weight="800" fill="#0f172a">Real Puppy</text>
+            <text x="305" y="200" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">20 cm → 28 cm</text>
+            <text x="305" y="220" text-anchor="middle" font-size="12" font-weight="700" fill="#059669">(Grew 8 cm taller!)</text>
+            <text x="485" y="207" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">Ate food &amp; drank water</text>
+          </svg>
+        `
+      },
+
+      {
+        id: 'bread_mould',
+        shortTitle: '2. Bread Mould',
+        category: 'Diversity: Fungi & Bacteria',
+        badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
+        caseNum: 'QUESTION 2',
+        title: 'Mould on Bread',
+        story: 'Wei Ming puts two slices of bread into clear sealed plastic bags on the kitchen table. He puts 5 drops of water on Bread A, and leaves Bread B completely dry. Look at what happened after 5 days.',
+        question: 'Why did green mould grow on Bread A after 5 days, while Bread B had no mould?',
+        svgCaption: 'EXPERIMENT AFTER 5 DAYS',
+        svgFooter: 'Both bags were kept on the same warm kitchen table.',
+        clues: [
+          { id: 'bm1', label: 'Bread A had 5 drops of water added to it', type: 'Clue 1' },
+          { id: 'bm2', label: 'Bread B was kept completely dry (no water)', type: 'Clue 2' },
+          { id: 'bm3', label: 'After 5 days, green mould grew on Bread A, but not on Bread B', type: 'Clue 3' }
+        ],
+        starters: {
+          claim: [
+            'Mould grew on Bread A because it had water.',
+            'Bread A had water for mould to grow, while Bread B was too dry.'
+          ],
+          evidence: [
+            'Bread A had 5 drops of water added and grew green mould after 5 days, while Bread B was dry and had no mould.',
+            'In the picture, mould only grew on Bread A which was wet.'
+          ],
+          reasoning: [
+            'Mould is a fungus (living thing) that needs water, air, and warmth to grow. Without water, mould cannot grow on Bread B.',
+            'Fungi like mould need moisture (water), air, and warmth to grow.'
+          ]
+        },
+        rubricChecks: {
+          claimKeywords: ['bread a', 'water', 'mould'],
+          evidenceKeywords: ['5 drops', 'water', 'dry', '5 days', 'no mould'],
+          reasoningKeywords: ['fungi', 'fungus', 'water', 'moisture', 'air', 'warmth', 'grow']
+        },
+        modelCER: {
+          claim: 'Mould grew on Bread A because it had water to grow.',
+          evidence: 'Bread A had 5 drops of water added and grew green mould after 5 days, whereas Bread B was kept dry and had no mould.',
+          reasoning: 'Mould is a fungus that needs water, air, and warmth to grow. Since Bread B had no water, the mould could not grow on it.'
+        },
+        svg: `
+          <svg viewBox="0 0 600 265" class="w-full max-w-xl h-auto" role="img" aria-label="Bread A with water and green mould versus dry Bread B with no mould">
+            <!-- Left Card: Bread A -->
+            <rect x="30" y="20" width="250" height="225" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <text x="155" y="48" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a">Bread A (+ 5 drops of water)</text>
+            <!-- Bread Slice -->
+            <path d="M 105,85 C 95,70 215,70 205,85 L 205,165 C 205,173 198,178 190,178 L 120,178 C 112,178 105,173 105,165 Z" fill="#fef3c7" stroke="#d97706" stroke-width="3" />
+            <!-- Green Mould Patches -->
+            <circle cx="135" cy="112" r="16" fill="#16a34a" opacity="0.85" />
+            <circle cx="172" cy="135" r="20" fill="#15803d" opacity="0.85" />
+            <circle cx="142" cy="152" r="13" fill="#22c55e" opacity="0.85" />
+            <text x="155" y="205" text-anchor="middle" font-size="13" font-weight="800" fill="#15803d">Lots of green mould</text>
+            <text x="155" y="223" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">Wet + Warm + Air</text>
+
+            <!-- Right Card: Bread B -->
+            <rect x="320" y="20" width="250" height="225" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <text x="445" y="48" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a">Bread B (Dry bread)</text>
+            <!-- Clean Bread Slice -->
+            <path d="M 395,85 C 385,70 505,70 495,85 L 495,165 C 495,173 488,178 480,178 L 410,178 C 402,178 395,173 395,165 Z" fill="#fef3c7" stroke="#d97706" stroke-width="3" />
+            <text x="445" y="205" text-anchor="middle" font-size="13" font-weight="800" fill="#475569">No mould at all</text>
+            <text x="445" y="223" text-anchor="middle" font-size="12" font-weight="600" fill="#64748b">No Water + Warm + Air</text>
+          </svg>
+        `
+      },
+
+      {
+        id: 'materials',
+        shortTitle: '3. Materials',
+        category: 'Diversity: Materials',
+        badgeColor: 'bg-sky-50 text-sky-700 border-sky-200',
+        caseNum: 'QUESTION 3',
+        title: 'Making a Raincoat',
+        story: 'Ryan wants to make a raincoat to wear when walking to school in the rain. He tests three materials (Material X, Material Y, and Material Z) and records their properties in the table below.',
+        question: 'Which material (X, Y, or Z) is best for making a raincoat? Explain why.',
+        svgCaption: 'PROPERTIES OF MATERIALS',
+        svgFooter: 'A good raincoat must keep rain out and bend easily when you walk.',
+        clues: [
+          { id: 'mat1', label: 'Material X is waterproof and flexible (bends easily)', type: 'Clue 1' },
+          { id: 'mat2', label: 'Material Y is NOT waterproof (absorbs water)', type: 'Clue 2' },
+          { id: 'mat3', label: 'Material Z is waterproof, but it is stiff and cannot bend', type: 'Clue 3' }
+        ],
+        starters: {
+          claim: [
+            'Material X is the best material for making a raincoat.',
+            'Material X should be chosen to make the raincoat.'
+          ],
+          evidence: [
+            'According to the table, Material X is both waterproof and flexible, whereas Material Y is not waterproof and Material Z is not flexible.',
+            'Material X does not absorb water and can bend easily.'
+          ],
+          reasoning: [
+            'A raincoat needs to be waterproof so rain cannot pass through to wet the wearer, and flexible so the person can move and wear it comfortably.',
+            'Waterproof materials keep the body dry in the rain, and flexibility allows the raincoat to bend when worn.'
+          ]
+        },
+        rubricChecks: {
+          claimKeywords: ['material x'],
+          evidenceKeywords: ['waterproof', 'flexible', 'bend', 'y', 'z'],
+          reasoningKeywords: ['rain', 'dry', 'wet', 'move', 'wear', 'bend', 'waterproof', 'flexible']
+        },
+        modelCER: {
+          claim: 'Material X is the best material for making a raincoat.',
+          evidence: 'In the table, Material X is both waterproof and flexible, while Material Y is not waterproof and Material Z is not flexible.',
+          reasoning: 'A raincoat must be waterproof to keep rain out so the person stays dry, and flexible so the person can bend and move comfortably while wearing it.'
+        },
+        svg: `
+          <svg viewBox="0 0 600 265" class="w-full max-w-xl h-auto" role="img" aria-label="Table showing properties of Material X, Y, and Z">
+            <rect x="30" y="15" width="540" height="235" rx="14" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <!-- Header -->
+            <rect x="30" y="15" width="540" height="46" rx="14" fill="#0284c7" />
+            <rect x="30" y="45" width="540" height="16" fill="#0284c7" />
+            <text x="125" y="44" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">Material</text>
+            <text x="300" y="44" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">Is it Waterproof?</text>
+            <text x="475" y="44" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">Is it Flexible (Bends)?</text>
+
+            <!-- Grid Lines -->
+            <line x1="215" y1="15" x2="215" y2="250" stroke="#e2e8f0" stroke-width="2" />
+            <line x1="385" y1="15" x2="385" y2="250" stroke="#e2e8f0" stroke-width="2" />
+            <line x1="30" y1="124" x2="570" y2="124" stroke="#e2e8f0" stroke-width="2" />
+            <line x1="30" y1="187" x2="570" y2="187" stroke="#e2e8f0" stroke-width="2" />
+
+            <!-- Row X -->
+            <text x="125" y="98" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a">Material X</text>
+            <text x="300" y="98" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">✅ Yes</text>
+            <text x="475" y="98" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">✅ Yes</text>
+
+            <!-- Row Y -->
+            <text x="125" y="161" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a">Material Y</text>
+            <text x="300" y="161" text-anchor="middle" font-size="14" font-weight="800" fill="#dc2626">❌ No (Absorbs water)</text>
+            <text x="475" y="161" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">✅ Yes</text>
+
+            <!-- Row Z -->
+            <text x="125" y="224" text-anchor="middle" font-size="15" font-weight="800" fill="#0f172a">Material Z</text>
+            <text x="300" y="224" text-anchor="middle" font-size="14" font-weight="800" fill="#059669">✅ Yes</text>
+            <text x="475" y="224" text-anchor="middle" font-size="14" font-weight="800" fill="#dc2626">❌ No (Stiff)</text>
+          </svg>
+        `
+      },
+
+      {
+        id: 'life_cycles',
+        shortTitle: '4. Life Cycles',
+        category: 'Cycles: Animals',
+        badgeColor: 'bg-purple-50 text-purple-700 border-purple-200',
+        caseNum: 'QUESTION 4',
+        title: 'Mealworm Beetle Life Cycle',
+        story: 'Siti kept some mealworms in a container with oats and carrot slices. After a few weeks, she noticed Stage C inside the box. Stage C did not eat any food and did not move around.',
+        question: 'Name Stage C in the life cycle below and explain why it does not eat any food.',
+        svgCaption: '4-STAGE LIFE CYCLE OF A BEETLE',
+        svgFooter: 'Stage A: Egg  →  Stage B: Larva (Mealworm)  →  Stage C: ?  →  Stage D: Adult Beetle',
+        clues: [
+          { id: 'lc1', label: 'The beetle has a 4-stage life cycle: Egg → Larva → Pupa → Adult', type: 'Clue 1' },
+          { id: 'lc2', label: 'Stage C comes right after the larva (mealworm) stage', type: 'Clue 2' },
+          { id: 'lc3', label: 'During Stage C, the insect stops eating and does not move around', type: 'Clue 3' }
+        ],
+        starters: {
+          claim: [
+            'Stage C is the pupa stage.',
+            'Stage C is called the pupa.'
+          ],
+          evidence: [
+            'In the life cycle diagram, Stage C comes after the larva stage, and it does not eat or move.',
+            'Stage C is the third stage after the mealworm (larva) and stays still without eating.'
+          ],
+          reasoning: [
+            'During the pupa stage, the insect stops feeding and moving while its body transforms (changes) into an adult beetle.',
+            'A pupa does not eat because it is undergoing transformation into an adult.'
+          ]
+        },
+        rubricChecks: {
+          claimKeywords: ['pupa'],
+          evidenceKeywords: ['larva', 'after', 'eat', 'move', 'third', 'stage'],
+          reasoningKeywords: ['adult', 'change', 'transform', 'develop', 'beetle']
+        },
+        modelCER: {
+          claim: 'Stage C is the pupa stage.',
+          evidence: 'In the diagram, Stage C comes right after the larva (mealworm) stage, and it stays still without eating any food.',
+          reasoning: 'During the pupa stage of a 4-stage life cycle, the insect stops eating and moving while its body transforms into an adult beetle.'
+        },
+        svg: `
+          <svg viewBox="0 0 600 265" class="w-full max-w-xl h-auto" role="img" aria-label="4-stage life cycle of a mealworm beetle showing Egg, Larva, Stage C Pupa, and Adult">
+            <!-- Stage A: Egg -->
+            <rect x="20" y="65" width="120" height="130" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <text x="80" y="92" text-anchor="middle" font-size="13" font-weight="800" fill="#475569">Stage A: Egg</text>
+            <ellipse cx="72" cy="135" rx="8" ry="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" />
+            <ellipse cx="90" cy="142" rx="8" ry="5" fill="#fef3c7" stroke="#d97706" stroke-width="1.5" />
+            <text x="80" y="178" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">Tiny eggs</text>
+
+            <!-- Arrow 1 -->
+            <text x="154" y="136" text-anchor="middle" font-size="18" font-weight="800" fill="#6366f1">→</text>
+
+            <!-- Stage B: Larva -->
+            <rect x="168" y="65" width="120" height="130" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <text x="228" y="92" text-anchor="middle" font-size="13" font-weight="800" fill="#475569">Stage B: Larva</text>
+            <path d="M 192,140 Q 228,125 264,140" fill="none" stroke="#d97706" stroke-width="12" stroke-linecap="round" />
+            <text x="228" y="178" text-anchor="middle" font-size="11" font-weight="700" fill="#059669">Eats a lot &amp; moults</text>
+
+            <!-- Arrow 2 -->
+            <text x="302" y="136" text-anchor="middle" font-size="18" font-weight="800" fill="#6366f1">→</text>
+
+            <!-- Stage C: Mystery Pupa -->
+            <rect x="316" y="55" width="124" height="150" rx="16" fill="#eef2ff" stroke="#4f46e5" stroke-width="3" />
+            <text x="378" y="85" text-anchor="middle" font-size="14" font-weight="800" fill="#4338ca">Stage C: ???</text>
+            <ellipse cx="378" cy="132" rx="16" ry="26" fill="#fde68a" stroke="#b45309" stroke-width="2" />
+            <text x="378" y="182" text-anchor="middle" font-size="11" font-weight="800" fill="#be123c">Does NOT eat or move</text>
+
+            <!-- Arrow 3 -->
+            <text x="454" y="136" text-anchor="middle" font-size="18" font-weight="800" fill="#6366f1">→</text>
+
+            <!-- Stage D: Adult -->
+            <rect x="468" y="65" width="115" height="130" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="2" />
+            <text x="525" y="92" text-anchor="middle" font-size="13" font-weight="800" fill="#475569">Stage D: Adult</text>
+            <text x="525" y="142" text-anchor="middle" font-size="30">🪲</text>
+            <text x="525" y="178" text-anchor="middle" font-size="11" font-weight="600" fill="#64748b">Lays eggs</text>
+          </svg>
+        `
+      },
+
+      {
+        id: 'magnets_p3',
+        shortTitle: '5. Magnets',
+        category: 'Interactions: Magnets',
+        badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
+        caseNum: 'QUESTION 5',
+        title: 'Floating Ring Magnets',
+        story: 'Ravi puts two ring magnets (Magnet A and Magnet B) onto a wooden stand.',
+        question: 'Describe what happens when Magnet A and B are dropped as shown in the diagram and explain why.',
+        svgCaption: 'RING MAGNETS ON A WOODEN STAND',
+        svgFooter: 'Look at the poles facing each other between Magnet A and Magnet B.',
+        clues: [
+          { id: 'mg1', label: 'The South pole (S) of Magnet A is facing the South pole (S) of Magnet B', type: 'Clue 1' }
+        ],
+        starters: {
+          claim: [
+            'Magnet A floats because the two magnets are repelling each other.',
+            'Magnet A and Magnet B push each other away (repel).'
+          ],
+          evidence: [
+            'In the picture, the South pole of Magnet A is facing the South pole of Magnet B, and there is a gap between them.',
+            'Both magnets have their South poles facing each other.'
+          ],
+          reasoning: [
+            'Like poles of magnets repel (push away from) each other. Since both South poles are facing each other, they repel and push Magnet A upward.',
+            'Magnets have a rule: like poles repel each other.'
+          ]
+        },
+        rubricChecks: {
+          claimKeywords: ['repel', 'push'],
+          evidenceKeywords: ['south', 'facing', 'gap', 'pole'],
+          reasoningKeywords: ['like poles', 'repel', 'push away', 'same pole']
+        },
+        modelCER: {
+          claim: 'Magnet B will drop all the way while Magnet A will float above Magnet B.',
+          evidence: 'In the picture, the South pole of Magnet A is facing the South pole of Magnet B.',
+          reasoning: 'Like poles of magnets repel (push away from) each other. Because two South poles are facing each other, the upward push keeps Magnet A floating.'
+        },
+        svg: `
+          <svg viewBox="0 0 600 265" class="w-full max-w-xl h-auto" role="img" aria-label="Two ring magnets on a wooden stand with South poles facing each other causing repulsion">
+            <!-- Wooden Stand Base -->
+            <rect x="180" y="225" width="240" height="22" rx="6" fill="#b45309" />
+            <!-- Wooden Stick -->
+            <rect x="290" y="35" width="20" height="190" rx="6" fill="#d97706" />
+
+            <!-- Bottom Magnet B -->
+            <rect x="220" y="185" width="160" height="20" rx="4" fill="#2563eb" stroke="#1e40af" stroke-width="2" />
+            <text x="300" y="200" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">North Pole (N)</text>
+            <rect x="220" y="165" width="160" height="20" rx="4" fill="#dc2626" stroke="#991b1b" stroke-width="2" />
+            <text x="300" y="180" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">South Pole (S)</text>
+            <text x="445" y="190" text-anchor="start" font-size="14" font-weight="800" fill="#0f172a">Magnet B</text>
+
+            <!-- Floating Top Magnet A -->
+            <g class="float-slow">
+              <rect x="220" y="80" width="160" height="20" rx="4" fill="#2563eb" stroke="#1e40af" stroke-width="2" />
+              <text x="300" y="95" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">North Pole (N)</text>
+              <rect x="220" y="100" width="160" height="20" rx="4" fill="#dc2626" stroke="#991b1b" stroke-width="2" />
+              <text x="300" y="115" text-anchor="middle" font-size="12" font-weight="800" fill="#ffffff">South Pole (S)</text>
+              <text x="445" y="105" text-anchor="start" font-size="14" font-weight="800" fill="#0f172a">Magnet A</text>
+            </g>
+
+
+          </svg>
+        `
+      }
+    ];
+
+    // =========================================================================
+    // CER SORTING MINI-GAME (P3 SCIENCE TOPICS)
+    // =========================================================================
+    const scrambleRounds = [
+      {
+        title: 'Round 1: Plants and Sunlight',
+        sentences: [
+          {
+            id: 'r1_s1',
+            text: 'Plant A was placed by the sunny window and grew green leaves, while Plant B was kept in a dark cupboard and turned yellow.',
+            correctType: 'Evidence',
+            explanation: 'This tells us what we observed in the experiment.'
+          },
+          {
+            id: 'r1_s2',
+            text: 'Plant A stayed healthy because it received sunlight.',
+            correctType: 'Claim',
+            explanation: 'This is a 1-sentence answer to the question.'
+          },
+          {
+            id: 'r1_s3',
+            text: 'Plants need sunlight to make food so they can stay healthy and grow.',
+            correctType: 'Reasoning',
+            explanation: 'This is the P3 Science rule about plants!'
+          }
+        ]
+      },
+      {
+        title: 'Round 2: Grouping Animals (Amphibians)',
+        sentences: [
+          {
+            id: 'r2_s1',
+            text: 'Amphibians have moist skin without scales and can live both on land and in water.',
+            correctType: 'Reasoning',
+            explanation: 'This gives the Science characteristics of amphibians.'
+          },
+          {
+            id: 'r2_s2',
+            text: 'Animal X is an amphibian.',
+            correctType: 'Claim',
+            explanation: 'This directly names the animal group in one short sentence.'
+          },
+          {
+            id: 'r2_s3',
+            text: 'Animal X has moist skin, lays eggs in water, and lives on land and in water.',
+            correctType: 'Evidence',
+            explanation: 'These are the clues given about Animal X.'
+          }
+        ]
+      },
+      {
+        title: 'Round 3: Magnetic Materials',
+        sentences: [
+          {
+            id: 'r3_s1',
+            text: 'The object does not move when a magnet is moved towards it.',
+            correctType: 'Evidence',
+            explanation: 'This describes what happens when a magnet is moved towards the object.'
+          },
+          {
+            id: 'r3_s2',
+            text: 'When a magnet is moved towards a non-magnetic material, there will be no interactions so it must be made of a non-magnetic material.',
+            correctType: 'Reasoning',
+            explanation: 'This explains the Science rule about magnets and when do they repel.'
+          },
+          {
+            id: 'r3_s3',
+            text: 'The object is made of a non-magnetic material.',
+            correctType: 'Claim',
+            explanation: 'This is a clear, short answer.'
+          }
+        ]
+      }
+    ];
+
+    // =========================================================================
+    // APPLICATION STATE & LOGIC
+    // =========================================================================
+    const state = {
+      activeMode: 'challenge',
+      activeChallengeIndex: 0,
+      completedChallenges: {},
+      userDrafts: {},
+      scrambleRoundIndex: 0,
+      scrambleSelections: {},
+      scrambleCompleted: false
+    };
+
+    challenges.forEach(c => {
+      state.userDrafts[c.id] = { claim: '', evidence: '', reasoning: '', pinned: [] };
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderTopicSelectorBar();
+      loadChallenge(0);
+      renderScrambleRound();
+      updateProgressTracker();
+    });
+
+    function renderTopicSelectorBar() {
+      const bar = document.getElementById('topic-selector-bar');
+      bar.innerHTML = '';
+
+      challenges.forEach((ch, idx) => {
+        const isActive = state.activeMode === 'challenge' && state.activeChallengeIndex === idx;
+        const isDone = !!state.completedChallenges[ch.id];
+
+        const btn = document.createElement('button');
+        btn.onclick = () => switchToChallenge(idx);
+        btn.className = `px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold whitespace-nowrap transition-all flex items-center gap-2 border ${
+          isActive
+            ? 'bg-indigo-600 text-white border-indigo-700 shadow-xs'
+            : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+        }`;
+
+        btn.innerHTML = `
+          <span>${ch.shortTitle}</span>
+          ${isDone ? '<span class="text-amber-300">⭐</span>' : ''}
+        `;
+        bar.appendChild(btn);
+      });
+
+      const divider = document.createElement('div');
+      divider.className = 'h-5 w-px bg-slate-300 mx-1 shrink-0';
+      bar.appendChild(divider);
+
+      const isScrambleActive = state.activeMode === 'scramble';
+      const gameBtn = document.createElement('button');
+      gameBtn.onclick = () => switchToScramble();
+      gameBtn.className = `px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold whitespace-nowrap transition-all flex items-center gap-1.5 border ${
+        isScrambleActive
+          ? 'bg-purple-600 text-white border-purple-700 shadow-xs'
+          : 'bg-purple-100 text-purple-900 border-purple-200 hover:bg-purple-200'
+      }`;
+      gameBtn.innerHTML = `
+        <span>🎮 Sorting Game</span>
+        ${state.scrambleCompleted ? '<span>⭐</span>' : ''}
+      `;
+      bar.appendChild(gameBtn);
+    }
+
+    function switchToChallenge(idx) {
+      saveCurrentDraft();
+      state.activeMode = 'challenge';
+      state.activeChallengeIndex = idx;
+      document.getElementById('cer-workspace-view').classList.remove('hidden');
+      document.getElementById('scramble-game-view').classList.add('hidden');
+      renderTopicSelectorBar();
+      loadChallenge(idx);
+    }
+
+    function switchToScramble() {
+      saveCurrentDraft();
+      state.activeMode = 'scramble';
+      document.getElementById('cer-workspace-view').classList.add('hidden');
+      document.getElementById('scramble-game-view').classList.remove('hidden');
+      renderTopicSelectorBar();
+      renderScrambleRound();
+    }
+
+    function loadChallenge(idx) {
+      const ch = challenges[idx];
+      const draft = state.userDrafts[ch.id];
+
+      const catBadge = document.getElementById('case-category-badge');
+      catBadge.textContent = ch.category;
+      catBadge.className = `px-3 py-1 rounded-full text-xs font-extrabold border ${ch.badgeColor}`;
+
+      document.getElementById('case-number-label').textContent = ch.caseNum;
+      document.getElementById('case-title').textContent = ch.title;
+      document.getElementById('case-story').textContent = ch.story;
+      document.getElementById('case-question').textContent = ch.question;
+
+      const statusPill = document.getElementById('case-status-pill');
+      if (state.completedChallenges[ch.id]) {
+        statusPill.textContent = '⭐ Star Earned!';
+        statusPill.className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900';
+      } else {
+        statusPill.textContent = 'Not Done Yet';
+        statusPill.className = 'px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600';
+      }
+
+      document.getElementById('svg-caption-badge').textContent = ch.svgCaption;
+      document.getElementById('case-svg-container').innerHTML = ch.svg;
+      document.getElementById('case-svg-footer').textContent = ch.svgFooter;
+
+      renderCluesAndTray(ch, draft);
+
+      document.getElementById('input-claim').value = draft.claim;
+      document.getElementById('input-evidence').value = draft.evidence;
+      document.getElementById('input-reasoning').value = draft.reasoning;
+
+      populateStarterSelect('starter-claim', ch.starters.claim);
+      populateStarterSelect('starter-evidence', ch.starters.evidence);
+      populateStarterSelect('starter-reasoning', ch.starters.reasoning);
+
+      document.getElementById('model-claim-text').textContent = ch.modelCER.claim;
+      document.getElementById('model-evidence-text').textContent = ch.modelCER.evidence;
+      document.getElementById('model-reasoning-text').textContent = ch.modelCER.reasoning;
+
+      document.getElementById('rubric-feedback-panel').classList.add('hidden');
+      document.getElementById('model-answer-panel').classList.add('hidden');
+    }
+
+    function populateStarterSelect(selectId, startersList) {
+      const sel = document.getElementById(selectId);
+      sel.innerHTML = '<option value="">+ Sentence Helper...</option>';
+      startersList.forEach(text => {
+        const opt = document.createElement('option');
+        opt.value = text;
+        opt.textContent = text.length > 48 ? text.slice(0, 48) + '...' : text;
+        sel.appendChild(opt);
+      });
+    }
+
+    function applyStarter(textareaId, selectEl) {
+      if (!selectEl.value) return;
+      const ta = document.getElementById(textareaId);
+      ta.value = selectEl.value;
+      selectEl.value = '';
+      ta.focus();
+      saveCurrentDraft();
+    }
+
+    function renderCluesAndTray(ch, draft) {
+      const container = document.getElementById('clue-cards-container');
+      container.innerHTML = '';
+
+      ch.clues.forEach(clue => {
+        const isPinned = draft.pinned.includes(clue.id);
+        const btn = document.createElement('button');
+        btn.onclick = () => togglePinClue(clue.id);
+        btn.className = `w-full text-left p-3 rounded-2xl border-2 text-xs sm:text-sm transition-all flex items-center justify-between gap-2.5 ${
+          isPinned
+            ? 'bg-emerald-50 border-emerald-400 text-emerald-950'
+            : 'bg-slate-50 border-slate-200 hover:border-emerald-300 hover:bg-white text-slate-700'
+        }`;
+
+        btn.innerHTML = `
+          <div>
+            <span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-bold mb-1 ${
+              isPinned ? 'bg-emerald-200 text-emerald-900' : 'bg-slate-200 text-slate-600'
+            }">${clue.type}</span>
+            <p class="font-bold leading-snug">${clue.label}</p>
+          </div>
+          <span class="shrink-0 px-2.5 py-1 rounded-xl text-xs font-extrabold ${
+            isPinned ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-200 text-slate-600'
+          }">${isPinned ? '📌 Saved' : '+ Save'}</span>
+        `;
+        container.appendChild(btn);
+      });
+
+      const tray = document.getElementById('pinned-tray');
+      document.getElementById('pinned-count').textContent = draft.pinned.length;
+
+      if (draft.pinned.length === 0) {
+        tray.innerHTML = 'Tap any clue above to save it here...';
+      } else {
+        tray.innerHTML = '';
+        draft.pinned.forEach(clueId => {
+          const clueObj = ch.clues.find(c => c.id === clueId);
+          if (!clueObj) return;
+          const chip = document.createElement('span');
+          chip.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-900 font-bold text-xs border border-emerald-300';
+          chip.innerHTML = `
+            <span>${clueObj.type}</span>
+            <button onclick="togglePinClue('${clueObj.id}')" class="hover:text-rose-600 font-extrabold ml-1">×</button>
+          `;
+          tray.appendChild(chip);
+        });
+      }
+    }
+
+    function togglePinClue(clueId) {
+      const ch = challenges[state.activeChallengeIndex];
+      const draft = state.userDrafts[ch.id];
+      const idx = draft.pinned.indexOf(clueId);
+      if (idx === -1) draft.pinned.push(clueId);
+      else draft.pinned.splice(idx, 1);
+      renderCluesAndTray(ch, draft);
+    }
+
+    function insertPinnedIntoEvidence() {
+      const ch = challenges[state.activeChallengeIndex];
+      const draft = state.userDrafts[ch.id];
+      if (draft.pinned.length === 0) {
+        showToast('Tap a clue card first to save it!', '📌');
+        return;
+      }
+      const sentences = draft.pinned.map(id => {
+        const c = ch.clues.find(item => item.id === id);
+        return c ? c.label : '';
+      }).filter(Boolean);
+
+      const evBox = document.getElementById('input-evidence');
+      evBox.value = 'In the picture, ' + sentences.join(' and ') + '.';
+      evBox.focus();
+      saveCurrentDraft();
+      showToast('Clues added to your Evidence box!', '✅');
+    }
+
+    function saveCurrentDraft() {
+      if (state.activeMode !== 'challenge') return;
+      const ch = challenges[state.activeChallengeIndex];
+      state.userDrafts[ch.id].claim = document.getElementById('input-claim').value;
+      state.userDrafts[ch.id].evidence = document.getElementById('input-evidence').value;
+      state.userDrafts[ch.id].reasoning = document.getElementById('input-reasoning').value;
+    }
+
+    function updateLiveStats() {
+      saveCurrentDraft();
+    }
+
+    function runRubricCheck() {
+      saveCurrentDraft();
+      const ch = challenges[state.activeChallengeIndex];
+      const draft = state.userDrafts[ch.id];
+
+      const claim = draft.claim.trim();
+      const evidence = draft.evidence.trim();
+      const reasoning = draft.reasoning.trim();
+
+      if (!claim || !evidence || !reasoning) {
+        showToast('Fill in Claim, Evidence, and Reasoning first!', '✏️');
+        return;
+      }
+
+      const lowerC = claim.toLowerCase();
+      const lowerE = evidence.toLowerCase();
+      const lowerR = reasoning.toLowerCase();
+
+      const startsWithYesNo = /^(yes|no|i think)\b/i.test(claim);
+      const hasClaimTopic = ch.rubricChecks.claimKeywords.some(k => lowerC.includes(k));
+      const claimGood = !startsWithYesNo && hasClaimTopic;
+
+      const hasEvidenceData = ch.rubricChecks.evidenceKeywords.some(k => lowerE.includes(k));
+      const evidenceGood = hasEvidenceData;
+
+      const hasReasoningPrinciple = ch.rubricChecks.reasoningKeywords.some(k => lowerR.includes(k));
+      const reasoningGood = hasReasoningPrinciple;
+
+      const grid = document.getElementById('rubric-cards-grid');
+      grid.innerHTML = `
+        <div class="p-4 rounded-2xl border-2 ${claimGood ? 'bg-blue-50 border-blue-200 text-blue-950' : 'bg-amber-50 border-amber-200 text-amber-950'}">
+          <div class="font-extrabold mb-1">${claimGood ? '✅ Great Claim!' : '💡 Check Your Claim'}</div>
+          <p>${
+            startsWithYesNo
+              ? 'Try not to start with "Yes" or "No". Write a full sentence instead!'
+              : claimGood
+              ? 'Nice! You answered the question in a clear sentence.'
+              : 'Make sure you clearly state your answer in 1 sentence.'
+          }</p>
+        </div>
+
+        <div class="p-4 rounded-2xl border-2 ${evidenceGood ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-amber-50 border-amber-200 text-amber-950'}">
+          <div class="font-extrabold mb-1">${evidenceGood ? '✅ Great Evidence!' : '💡 Check Your Evidence'}</div>
+          <p>${
+            evidenceGood
+              ? 'Awesome! You used clues from the picture or table.'
+              : 'Add the numbers or facts you saw in the picture or table!'
+          }</p>
+        </div>
+
+        <div class="p-4 rounded-2xl border-2 ${reasoningGood ? 'bg-amber-50 border-amber-300 text-amber-950' : 'bg-rose-50 border-rose-200 text-rose-950'}">
+          <div class="font-extrabold mb-1">${reasoningGood ? '✅ Great Reasoning!' : '💡 Check Your Reasoning'}</div>
+          <p>${
+            reasoningGood
+              ? 'Well done! You explained the Science rule clearly.'
+              : 'Write the P3 Science rule that explains WHY your answer is correct.'
+          }</p>
+        </div>
+      `;
+
+      const panel = document.getElementById('rubric-feedback-panel');
+      panel.classList.remove('hidden');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      state.completedChallenges[ch.id] = true;
+      document.getElementById('case-status-pill').textContent = '⭐ Star Earned!';
+      document.getElementById('case-status-pill').className = 'px-3 py-1 rounded-full text-xs font-extrabold bg-amber-100 text-amber-900';
+      renderTopicSelectorBar();
+      updateProgressTracker();
+      showToast('Great job! You earned a star!', '⭐');
+    }
+
+    function revealModelAnswer() {
+      const panel = document.getElementById('model-answer-panel');
+      panel.classList.remove('hidden');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function exportStudentReport() {
+      saveCurrentDraft();
+      const ch = challenges[state.activeChallengeIndex];
+      const draft = state.userDrafts[ch.id];
+
+      const reportText = [
+        `P3 SCIENCE CER ANSWER`,
+        `Topic: ${ch.title}`,
+        `Question: ${ch.question}`,
+        `----------------------------------------`,
+        `C (Claim): ${draft.claim || ''}`,
+        `E (Evidence): ${draft.evidence || ''}`,
+        `R (Reasoning): ${draft.reasoning || ''}`
+      ].join('\n');
+
+      const tempArea = document.createElement('textarea');
+      tempArea.value = reportText;
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      try {
+        document.execCommand('copy');
+        showToast('Your CER answer is copied!', '📋');
+      } catch (err) {
+        showToast('Use the Print button instead!', '🖨️');
+      }
+      document.body.removeChild(tempArea);
+    }
+
+    // =========================================================================
+    // SORTING GAME LOGIC
+    // =========================================================================
+    function renderScrambleRound() {
+      const round = scrambleRounds[state.scrambleRoundIndex];
+      document.getElementById('scramble-round-num').textContent = state.scrambleRoundIndex + 1;
+      document.getElementById('scramble-total-rounds').textContent = scrambleRounds.length;
+      document.getElementById('scramble-scenario-title').textContent = round.title;
+
+      const listEl = document.getElementById('scramble-cards-list');
+      listEl.innerHTML = '';
+
+      round.sentences.forEach((item, idx) => {
+        const selected = state.scrambleSelections[item.id] || '';
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl border-2 border-slate-200 bg-slate-50 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4';
+
+        card.innerHTML = `
+          <div class="flex items-start gap-3">
+            <span class="w-7 h-7 rounded-lg bg-indigo-600 text-white font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${idx + 1}</span>
+            <p class="text-base font-bold text-slate-800 leading-relaxed">"${item.text}"</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            ${['Claim', 'Evidence', 'Reasoning'].map(role => {
+              const isChosen = selected === role;
+              let activeStyle = 'bg-white border-slate-300 text-slate-700 hover:bg-slate-100';
+              if (isChosen && role === 'Claim') activeStyle = 'bg-blue-600 border-blue-600 text-white';
+              if (isChosen && role === 'Evidence') activeStyle = 'bg-emerald-600 border-emerald-600 text-white';
+              if (isChosen && role === 'Reasoning') activeStyle = 'bg-amber-400 border-amber-500 text-slate-950';
+
+              return `<button onclick="selectScrambleRole('${item.id}', '${role}')" class="px-3.5 py-2 rounded-xl border-2 text-xs sm:text-sm font-extrabold transition-all ${activeStyle}">${role}</button>`;
+            }).join('')}
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+
+      document.getElementById('scramble-feedback').classList.add('hidden');
+    }
+
+    function selectScrambleRole(sentenceId, role) {
+      state.scrambleSelections[sentenceId] = role;
+      renderScrambleRound();
+    }
+
+    function checkScrambleAnswers() {
+      const round = scrambleRounds[state.scrambleRoundIndex];
+      if (!round.sentences.every(s => !!state.scrambleSelections[s.id])) {
+        showToast('Pick Claim, Evidence, or Reasoning for all 3 sentences!', '🎮');
+        return;
+      }
+
+      let correctCount = 0;
+      const detailsHtml = round.sentences.map((s, i) => {
+        const userChoice = state.scrambleSelections[s.id];
+        const isRight = userChoice === s.correctType;
+        if (isRight) correctCount++;
+
+        return `
+          <div class="p-3 rounded-xl border ${isRight ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-rose-50 border-rose-200 text-rose-950'}">
+            <strong>Sentence ${i + 1}:</strong> ${
+              isRight
+                ? `✅ Correct! It is <strong>${s.correctType}</strong>. ${s.explanation}`
+                : `❌ Try again! This is <strong>${s.correctType}</strong>. ${s.explanation}`
+            }
+          </div>
+        `;
+      }).join('');
+
+      const fb = document.getElementById('scramble-feedback');
+      fb.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-300', 'bg-amber-50', 'border-amber-300');
+
+      if (correctCount === 3) {
+        fb.classList.add('bg-emerald-50', 'border-emerald-300');
+        fb.innerHTML = `<div class="space-y-2"><p class="font-extrabold text-emerald-900 text-lg">🎉 3 out of 3! Awesome job!</p>${detailsHtml}</div>`;
+        state.scrambleCompleted = true;
+        renderTopicSelectorBar();
+        updateProgressTracker();
+        showToast('You earned a star in the Sorting Game!', '⭐');
+      } else {
+        fb.classList.add('bg-amber-50', 'border-amber-300');
+        fb.innerHTML = `<div class="space-y-2"><p class="font-extrabold text-amber-950 text-base">You got ${correctCount} out of 3 right!</p>${detailsHtml}</div>`;
+      }
+    }
+
+    function resetCurrentScramble() {
+      scrambleRounds[state.scrambleRoundIndex].sentences.forEach(s => delete state.scrambleSelections[s.id]);
+      renderScrambleRound();
+    }
+
+    function prevScrambleRound() {
+      state.scrambleRoundIndex = (state.scrambleRoundIndex - 1 + scrambleRounds.length) % scrambleRounds.length;
+      renderScrambleRound();
+    }
+
+    function nextScrambleRound() {
+      state.scrambleRoundIndex = (state.scrambleRoundIndex + 1) % scrambleRounds.length;
+      renderScrambleRound();
+    }
+
+    // =========================================================================
+    // UI HELPERS
+    // =========================================================================
+    function toggleCheatSheet() {
+      document.getElementById('cheat-sheet-drawer').classList.toggle('hidden');
+      document.getElementById('cheat-chevron').classList.toggle('rotate-180');
+    }
+
+    function updateProgressTracker() {
+      const dotsContainer = document.getElementById('progress-dots');
+      dotsContainer.innerHTML = '';
+      let completedCount = 0;
+
+      challenges.forEach(ch => {
+        const done = !!state.completedChallenges[ch.id];
+        if (done) completedCount++;
+        const dot = document.createElement('span');
+        dot.className = `w-3 h-3 rounded-full ${done ? 'bg-amber-400' : 'bg-slate-300'}`;
+        dotsContainer.appendChild(dot);
+      });
+
+      if (state.scrambleCompleted) completedCount++;
+      const gameDot = document.createElement('span');
+      gameDot.className = `w-3 h-3 rounded-full ${state.scrambleCompleted ? 'bg-purple-500' : 'bg-slate-300'}`;
+      dotsContainer.appendChild(gameDot);
+
+      document.getElementById('progress-count').textContent = `${completedCount}/6`;
+    }
+
+    let toastTimer;
+    function showToast(msg, icon = '🌟') {
+      const el = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      document.getElementById('toast-icon').textContent = icon;
+      el.classList.remove('translate-y-24', 'opacity-0');
+      el.classList.add('translate-y-0', 'opacity-100');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        el.classList.remove('translate-y-0', 'opacity-100');
+        el.classList.add('translate-y-24', 'opacity-0');
+      }, 3000);
+    }
+
+    function openResetModal() {
+      document.getElementById('reset-modal').classList.remove('hidden');
+    }
+
+    function closeResetModal() {
+      document.getElementById('reset-modal').classList.add('hidden');
+    }
+
+    function confirmResetAll() {
+      state.completedChallenges = {};
+      state.scrambleSelections = {};
+      state.scrambleCompleted = false;
+      state.scrambleRoundIndex = 0;
+      challenges.forEach(c => {
+        state.userDrafts[c.id] = { claim: '', evidence: '', reasoning: '', pinned: [] };
+      });
+      closeResetModal();
+      switchToChallenge(0);
+      updateProgressTracker();
+      showToast('All cleared! Ready to start fresh.', '🔄');
+    }
+  </script>
+</body>
+</html>
